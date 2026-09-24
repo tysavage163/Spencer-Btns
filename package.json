@@ -1,0 +1,34 @@
+{
+  "name": "spencer-btns",
+  "version": "1.0.0",
+  "description": "Transparent, unobfuscated interactive-buttons helper for spencer-baileys",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "baileys",
+    "spencer-baileys",
+    "buttons",
+    "interactive-message",
+    "savage-tech"
+  ],
+  "author": "Spencer",
+  "license": "MIT",
+  "homepage": "https://github.com/testsbot949-byaaatch/Spencer-Btns",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/testsbot949-byaaatch/Spencer-Btns.git"
+  },
+  "bugs": {
+    "url": "https://github.com/testsbot949-byaaatch/Spencer-Btns/issues"
+  },
+  "peerDependencies": {
+    "spencer-baileys": "^1.0.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
