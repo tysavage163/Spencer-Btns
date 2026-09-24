@@ -28,7 +28,7 @@ await sendButtons(sock, jid, {
   footer: 'Savage Tech',
   title: 'Menu',
   buttons: [
-    btn.url('Open GitHub', 'https://github.com/testsbot949-byaaatch'),
+    btn.url('Open GitHub', 'https://github.com/tysavage163'),
     btn.reply('Say hi', 'hi_id'),
     btn.copy('Copy invite code', 'WOLF2026'),
     btn.call('Call support', '+254700000000'),

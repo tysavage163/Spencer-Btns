@@ -17,13 +17,13 @@
   ],
   "author": "Spencer",
   "license": "MIT",
-  "homepage": "https://github.com/testsbot949-byaaatch/Spencer-Btns",
+  "homepage": "https://github.com/tysavage163/Spencer-Btns",
   "repository": {
     "type": "git",
-    "url": "https://github.com/testsbot949-byaaatch/Spencer-Btns.git"
+    "url": "https://github.com/tysavage163/Spencer-Btns.git"
   },
   "bugs": {
-    "url": "https://github.com/testsbot949-byaaatch/Spencer-Btns/issues"
+    "url": "https://github.com/tysavage163/Spencer-Btns/issues"
   },
   "peerDependencies": {
     "spencer-baileys": "^1.0.4"
