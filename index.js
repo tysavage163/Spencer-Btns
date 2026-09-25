@@ -1,26 +1,7 @@
 // spencer-btns -- transparent, unobfuscated interactive-buttons helper for spencer-baileys
-// (Savage Tech). No eval, no string-table obfuscation -- read it, audit it, fork it.
-//
-// Usage:
-//   import { sendButtons, btn } from 'spencer-btns'
-//   await sendButtons(sock, jid, {
-//       text: 'Choose an option',
-//       footer: 'Savage Tech',
-//       buttons: [
-//           btn.url('Open GitHub', 'https://github.com/testsbot949-byaaatch'),
-//           btn.reply('Say hi', 'hi_id'),
-//           btn.copy('Copy code', 'WOLF2026')
-//       ]
-//   })
+import { generateWAMessageFromContent, prepareWAMessageMedia } from 'spencer-baileys'
 
-import { generateWAMessageFromContent } from 'spencer-baileys'
-
-/**
- * Button builders for WhatsApp's native-flow interactive buttons.
- * Each returns { name, buttonParamsJson } ready to drop into `buttons: []`.
- */
 export const btn = {
-	/** Opens a URL when tapped */
 	url(display_text, url, merchant_url) {
 		return {
 			name: 'cta_url',
@@ -31,8 +12,6 @@ export const btn = {
 			})
 		}
 	},
-
-	/** Copies a code/string to the recipient's clipboard when tapped */
 	copy(display_text, copy_code) {
 		return {
 			name: 'cta_copy',
@@ -42,27 +21,18 @@ export const btn = {
 			})
 		}
 	},
-
-	/** Prompts a phone call when tapped */
 	call(display_text, phone_number) {
 		return {
 			name: 'cta_call',
 			buttonParamsJson: JSON.stringify({ display_text, phone_number })
 		}
 	},
-
-	/** Sends `id` back as the message text when tapped (most common "quick reply" button) */
 	reply(display_text, id) {
 		return {
 			name: 'quick_reply',
 			buttonParamsJson: JSON.stringify({ display_text, id })
 		}
 	},
-
-	/**
-	 * A tappable list/menu.
-	 * sections: [{ title, rows: [{ header, title, description, id }] }]
-	 */
 	list(list_button_text, sections) {
 		return {
 			name: 'single_select',
@@ -71,25 +41,6 @@ export const btn = {
 	}
 }
 
-/**
- * Send an interactive-buttons message.
- *
- * @param {import('spencer-baileys').WASocket} sock
- * @param {string} jid
- * @param {object} options
- * @param {string} [options.text] body text
- * @param {string} [options.footer] footer text
- * @param {string} [options.title] header title
- * @param {string} [options.subtitle] header subtitle
- * @param {Array} [options.buttons] array of button objects (use `btn.*` builders)
- * @param {Array} [options.interactiveButtons] alias for `buttons` (kept
- *   for compatibility with libraries that use this call shape -- lets you
- *   swap `otherLib.sendInteractiveMessage(...)` for `sendButtons(...)`
- *   without touching the call site's payload shape)
- * @param {object} [options.contextInfo] raw contextInfo to merge in (e.g. for
- *   `{ mentionedJid: [...] }`)
- * @param {import('spencer-baileys').WAMessage} [options.quoted] message to quote/reply to
- */
 export async function sendButtons(sock, jid, options = {}) {
 	const {
 		text = '',
@@ -97,25 +48,43 @@ export async function sendButtons(sock, jid, options = {}) {
 		title,
 		subtitle,
 		buttons,
-		interactiveButtons, // compatibility alias for `buttons`
+		interactiveButtons,
 		contextInfo,
-		quoted
+		quoted,
+		image // 👈 1. Added image to destructuring
 	} = options
 
 	const resolvedButtons = buttons || interactiveButtons || []
 
 	if (!Array.isArray(resolvedButtons) || resolvedButtons.length === 0) {
-		throw new Error('spencer-btns: sendButtons requires at least one button (pass `buttons` or `interactiveButtons`)')
+		throw new Error('spencer-btns: sendButtons requires at least one button')
 	}
 
 	for (const b of resolvedButtons) {
 		if (!b || typeof b.name !== 'string' || typeof b.buttonParamsJson !== 'string') {
-			throw new Error('spencer-btns: each button needs { name, buttonParamsJson } -- use the btn.* builders')
+			throw new Error('spencer-btns: each button needs { name, buttonParamsJson }')
+		}
+	}
+
+	// 👈 2. Prepare the header with optional image
+	let header = { title: title || '', subtitle: subtitle || '', hasMediaAttachment: false }
+	
+	if (image) {
+		// Prepare the media for WhatsApp
+		const media = await prepareWAMessageMedia(
+			{ image: typeof image === 'string' ? { url: image } : image },
+			{ upload: sock.waUploadToServer }
+		)
+		header = {
+			title: title || '',
+			subtitle: subtitle || '',
+			hasMediaAttachment: true,
+			imageMessage: media.imageMessage
 		}
 	}
 
 	const bodyAndHeader = {
-		header: { title: title || '', subtitle: subtitle || '', hasMediaAttachment: false },
+		header, // 👈 3. Use the new header object
 		...(text ? { body: { text } } : {}),
 		...(footer ? { footer: { text: footer } } : {})
 	}
@@ -132,13 +101,8 @@ export async function sendButtons(sock, jid, options = {}) {
 		}
 	}
 
-	// No viewOnceMessage wrapper -- interactiveMessage goes at the top level.
 	const messageContent = { interactiveMessage }
 
-	// WhatsApp requires this additionalNodes stanza for the client to
-	// recognize and render the message as interactive (native-flow) buttons.
-	// Without it, the message relays successfully with no error, but the
-	// recipient's client silently ignores the interactive content.
 	const interactiveStanzaNodes = [
 		{
 			tag: 'biz',
@@ -168,13 +132,5 @@ export async function sendButtons(sock, jid, options = {}) {
 	return fullMessage
 }
 
-/**
- * Alias for `sendButtons`, matching the method name used by some other
- * interactive-buttons libraries -- use this if you want a true drop-in
- * replacement without renaming the call site
- * (`otherLib.sendInteractiveMessage(sock, jid, {...})` becomes
- * `spencer-btns.sendInteractiveMessage(sock, jid, {...})`).
- */
 export const sendInteractiveMessage = sendButtons
-
 export default { sendButtons, sendInteractiveMessage, btn }
