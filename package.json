@@ -1,6 +1,6 @@
 {
   "name": "spencer-btns",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Transparent, unobfuscated interactive-buttons helper for spencer-baileys",
   "type": "module",
   "main": "index.js",
