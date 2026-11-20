@@ -1,5 +1,5 @@
-// spencer-btns -- transparent, unobfuscated interactive-buttons helper for spencer-baileys
-import { generateWAMessageFromContent, prepareWAMessageMedia } from 'spencer-baileys'
+// spencer-btns -- transparent, unobfuscated interactive-buttons helper for spencer-prime
+import { generateWAMessageFromContent, prepareWAMessageMedia } from 'spencer-prime'
 
 export const btn = {
 	url(display_text, url, merchant_url) {

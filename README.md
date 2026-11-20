@@ -1,7 +1,7 @@
 # spencer-btns
 
 A small, **fully transparent** interactive-buttons helper for
-[spencer-baileys](https://www.npmjs.com/package/spencer-baileys). No `eval`, no
+[spencer-prime](https://www.npmjs.com/package/spencer-prime). No `eval`, no
 string-table obfuscation, no tamper-checks — every line is plain, readable
 JavaScript you can audit in under five minutes.
 
@@ -12,13 +12,13 @@ can't read.
 ## Install
 
 ```bash
-npm install spencer-btns spencer-baileys
+npm install spencer-btns spencer-prime
 ```
 
 ## Usage
 
 ```js
-import makeWASocket from 'spencer-baileys'
+import makeWASocket from 'spencer-prime'
 import { sendButtons, btn } from 'spencer-btns'
 
 const sock = makeWASocket({ /* ... */ })
@@ -73,7 +73,7 @@ sendButtons(sock, jid, {
 Most WhatsApp-bot "buttons" packages in this ecosystem ship as obfuscated,
 `eval`-based code with no visibility into what they actually do at runtime.
 `spencer-btns` builds the same WhatsApp native-flow button message directly
-from Baileys/spencer-baileys's own documented proto types — there's nothing
+from Baileys/spencer-prime's own documented proto types — there's nothing
 hidden, and nothing here depends on any specific vendor's backend.
 
 ## License

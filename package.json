@@ -1,20 +1,13 @@
 {
-  "name": "spencer-btns",
-  "version": "1.0.1",
-  "description": "Transparent, unobfuscated interactive-buttons helper for spencer-baileys",
+  "name": "spencer-prime-btns",
+  "version": "2.0.0",
+  "description": "Transparent, unobfuscated interactive-buttons helper for spencer-prime",
   "type": "module",
   "main": "index.js",
   "exports": {
     ".": "./index.js"
   },
-  "keywords": [
-    "whatsapp",
-    "baileys",
-    "spencer-baileys",
-    "buttons",
-    "interactive-message",
-    "savage-tech"
-  ],
+  "keywords": "[\"whatsapp\",\"baileys\",\"spencer-prime\",\"buttons\",\"interactive-message\",\"savage-tech\"]",
   "author": "Spencer",
   "license": "MIT",
   "homepage": "https://github.com/tysavage163/Spencer-Btns",
@@ -25,10 +18,13 @@
   "bugs": {
     "url": "https://github.com/tysavage163/Spencer-Btns/issues"
   },
-  "peerDependencies": {
-    "spencer-baileys": "^1.0.4"
-  },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "spencer-prime": "^2.0.0"
+  },
+  "peerDependencies": {
+    "spencer-prime": "^2.0.0"
   }
 }
